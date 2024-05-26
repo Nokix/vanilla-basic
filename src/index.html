@@ -1,17 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Vanilla JavaScript App</title>
+    <meta charset="UTF-8">
+    <title>Pokemondisplay</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-
 <body>
-  <main>
-    <h1>Vanilla JavaScript App</h1>
-  </main>
-</body>
+<h1>Pokemondisplayer</h1>
+<input type="text" id="pokemon_name_input" placeholder="Insert Pokemon Name">
+<button type="button" onclick="show_picture()">Show Picture</button>
+<br>
+<img src="" id="picture">
+<script>
+    async function show_picture(){
+        pokemon_name = document.getElementById("pokemon_name_input").value;
+        console.log('Inserted Name: ', pokemon_name);
 
+        // Translate name
+        try {
+            let response = await fetch(`http://127.0.0.1:5000/translate/${pokemon_name}`);
+            console.log(response)
+            let data = await response.json();
+            pokemon_name = data.name;
+            console.log('Found name: ', pokemon_name);
+        } catch (error){
+            console.error('Error while translating from pokeapi:', error);
+        }
+
+
+        // Find Picture
+        let picture_url = "";
+        try {
+            let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon_name}`);
+            let data = await response.json();
+            console.log('Geladene Daten:', data);
+            picture_url = data.sprites.front_default;
+        } catch (error) {
+            console.error('Error while loading from pokeapi:', error);
+        }
+
+        // display Picture
+        document.getElementById("picture").src = picture_url;
+
+    }
+</script>
+</body>
 </html>
