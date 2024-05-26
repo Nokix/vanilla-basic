@@ -2,12 +2,12 @@ from flask import Flask, jsonify, render_template
 # from provided_translator import translate_to_eng
 from sqlalchemy_translator import translate_to_eng
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="src")
 
 
 @app.route('/')
 def home():
-    return render_template('src/index.html')
+    return render_template('index.html')
 
 
 @app.route('/translate/<pokemon_name>')
